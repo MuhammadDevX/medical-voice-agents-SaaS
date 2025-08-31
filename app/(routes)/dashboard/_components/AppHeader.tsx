@@ -1,3 +1,4 @@
+import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import React from 'react'
 
@@ -26,9 +27,15 @@ const menuOptions = [
 
 
 function AppHeader() {
-  return <div>
-    <Image src={"logo.svg"} alt="logo" width={180} height={180} />
-    App Header</div>
+  return <div className='flex justify-between items-center p-4 shadow px-10 md:px-20 lg:px-40'>
+    <Image src={"logo.svg"} alt="logo" width={180} height={90} />
+    <div className='hidden md:flex gap-7 items-center'>
+      {menuOptions.map((option, index) => {
+        return <div key={index}><h2 className='hover:font-bold cursor'>{option.name}</h2></div>
+      })}
+    </div>
+    <UserButton />
+  </div>
 }
 
 export default AppHeader
