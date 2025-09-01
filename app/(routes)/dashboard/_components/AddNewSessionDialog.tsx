@@ -77,7 +77,7 @@ const AddNewSessionDialog: React.FC<Props> = (props) => {
                 Cancel
               </Button>
             </DialogClose>
-            <Button onClick={() => OnClickNext()}>Next <ArrowRight /></Button>
+            <Button disabled={loading} onClick={() => OnClickNext()}>Next <ArrowRight /></Button>
           </DialogFooter>
         </DialogContent>
       }
@@ -87,12 +87,15 @@ const AddNewSessionDialog: React.FC<Props> = (props) => {
           <DialogHeader>
             <DialogTitle>Select Suggested Lawyer</DialogTitle>
             <DialogDescription asChild>
-              <div>
-                <h2>Select Lawyers</h2>
-                {suggestedDoctors.map((doctor, index) => {
-                  return <SuggestedDoctorCard selectedDoctor={selectedDoctor} doctorAgent={doctor}
-                    setSelectedDoctor={setSelectedDoctor} />
-                })}
+              <div className="flex flex-col gap-5">
+                <h2 className="font-bold text-xl text-gray-500">Select Lawyers</h2>
+                <div className="flex gap-4 w-96 overflow-scroll">
+                  {suggestedDoctors.map((doctor, index) => {
+                    return <SuggestedDoctorCard
+                      key={index} selectedDoctor={selectedDoctor} doctorAgent={doctor}
+                      setSelectedDoctor={setSelectedDoctor} />
+                  })}
+                </div>
               </div>
             </DialogDescription>
           </DialogHeader>

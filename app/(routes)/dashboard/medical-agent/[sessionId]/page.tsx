@@ -39,9 +39,9 @@ const MedicalVoiceAgent: React.FC<Props> = (props) => {
         <h2 className="p-1 px-2 border rounded-md flex gap-2 items-center"><Circle className="h-4 w-4" /> Not Connected</h2>
         <h2 className="font-bold text-gray-400">00:00</h2>
       </div>
-      <div>
+      <div className="flex items-center flex-col">
         <Image src={sessionDetail?.selectedDoctor?.image
-        } alt={sessionDetail?.selectedDoctor?.specialist} height={80} width={80} className="rounded" />
+        } alt={sessionDetail?.selectedDoctor?.specialist} height={120} width={120} className="object-cover h-[100px] w-[100px] rounded-full" />
       </div>
     </div>
   );
