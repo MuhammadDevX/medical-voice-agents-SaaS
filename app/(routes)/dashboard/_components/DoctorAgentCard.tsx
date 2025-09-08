@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { IconArrowRight } from '@tabler/icons-react'
 import Image from 'next/image'
 import React from 'react'
-type DoctorAgentType = {
+export type DoctorAgentType = {
   id: number,
   specialist: string,
   description: string,

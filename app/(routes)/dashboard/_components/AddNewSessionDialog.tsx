@@ -12,10 +12,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import SuggestedDoctorCard from "./SuggestedDoctorCard";
+import DoctorAgentCard, { DoctorAgentType } from "./DoctorAgentCard";
 interface Props {
   // propName: string
 }
@@ -23,8 +24,8 @@ interface Props {
 const AddNewSessionDialog: React.FC<Props> = (props) => {
   const [note, setNote] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
-  const [suggestedDoctors, setSuggestedDoctors] = useState([])
-  const [selectedDoctor, setSelectedDoctor] = useState<any>()
+  const [suggestedDoctors, setSuggestedDoctors] = useState<DoctorAgentType[]>([])
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorAgentType>()
 
   const router = useRouter()
 
@@ -58,57 +59,41 @@ const AddNewSessionDialog: React.FC<Props> = (props) => {
   return (
     <Dialog>
       <DialogTrigger><Button>+ Start a consultation</Button></DialogTrigger>
-      {suggestedDoctors.length === 0 &&
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Basic Details</DialogTitle>
-            <DialogDescription asChild>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Basic Details</DialogTitle>
+          <DialogDescription asChild>
+
+            {suggestedDoctors?.length === 0 ?
               <div>
                 <h2>Add Symptoms or any other details</h2>
                 <Textarea placeholder="Add Detail here" className="h-[200px] mt-1"
                   value={note}
                   onChange={(e) => { setNote(e.target.value) }} />
               </div>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose>
-              <Button variant={'outline'}>
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button disabled={loading} onClick={() => OnClickNext()}>Next <ArrowRight /></Button>
-          </DialogFooter>
-        </DialogContent>
-      }
+              : <div className="grid grid-cols-2 gap-5">
+                {/* //Suggested Doctors */}
+                {suggestedDoctors.map((doctor, index) => {
+                  return <SuggestedDoctorCard key={index} doctorAgent={doctor} setSelectedDoctor={setSelectedDoctor} selectedDoctor={selectedDoctor} />
+                })}
+              </div>}
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose>
+            <Button variant={'outline'}>
+              Cancel
+            </Button>
+          </DialogClose>
+          {suggestedDoctors.length === 0 ?
+            <Button disabled={loading} onClick={() => OnClickNext()}>{loading && <Loader2 className="animate-spin" />} Next <ArrowRight /></Button>
+            :
+            <Button onClick={() => onStartConsultation()} disabled={!note || loading}>Start Conversation {loading && <Loader2 className="animate-spin" />}</Button>
+          }
+        </DialogFooter>
+      </DialogContent>
 
-      {suggestedDoctors.length != 0 &&
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Select Suggested Lawyer</DialogTitle>
-            <DialogDescription asChild>
-              <div className="flex flex-col gap-5">
-                <h2 className="font-bold text-xl text-gray-500">Select Lawyers</h2>
-                <div className="flex gap-4 w-96 overflow-scroll">
-                  {suggestedDoctors.map((doctor, index) => {
-                    return <SuggestedDoctorCard
-                      key={index} selectedDoctor={selectedDoctor} doctorAgent={doctor}
-                      setSelectedDoctor={setSelectedDoctor} />
-                  })}
-                </div>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose>
-              <Button variant={'outline'}>
-                Back
-              </Button>
-            </DialogClose>
-            <Button onClick={() => onStartConsultation()}>+ Start Consultation <ArrowRight /></Button>
-          </DialogFooter>
-        </DialogContent>
-      }
+
     </Dialog >
   );
 };
